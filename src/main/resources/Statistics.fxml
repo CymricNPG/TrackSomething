@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="290.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml" fx:controller="net.npg.tracktime.statistics.StatisticsController">
+    <children>
+        <TableView id="tableView" prefHeight="228.0" prefWidth="572.0" AnchorPane.bottomAnchor="48.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
+            <columns>
+                <TableColumn prefWidth="75.0" text="Column X" />
+                <TableColumn prefWidth="75.0" text="Column X" />
+            </columns>
+        </TableView>
+        <Button fx:id="quitButton" defaultButton="true" mnemonicParsing="false" onAction="#quitAction" text="Verlassen" AnchorPane.bottomAnchor="13.0" AnchorPane.rightAnchor="14.0" />
+    </children>
+    <stylesheets>
+        <URL value="@statistics.css" />
+    </stylesheets>
+</AnchorPane>
