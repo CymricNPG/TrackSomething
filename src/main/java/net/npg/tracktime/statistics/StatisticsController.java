@@ -4,14 +4,14 @@
  */
 package net.npg.tracktime.statistics;
 
-import java.net.URL;
-import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.stage.Stage;
+
+import java.net.URL;
+import java.util.ResourceBundle;
 
 /**
  * FXML Controller class
@@ -27,13 +27,13 @@ public class StatisticsController implements Initializable {
      * Initializes the controller class.
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(final URL url, final ResourceBundle rb) {
         // TODO
     }
 
     @FXML
-    public void quitAction(ActionEvent event) {
-        Stage stage = (Stage) quitButton.getScene().getWindow();
+    public void quitAction(final ActionEvent event) {
+        final Stage stage = (Stage) quitButton.getScene().getWindow();
         stage.close();
     }
 }

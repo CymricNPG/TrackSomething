@@ -4,11 +4,10 @@
  */
 package net.npg.tracktime.data;
 
-import java.util.Date;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Date;
 
 /**
- *
  * @author Cymric
  */
 @XmlRootElement()
@@ -21,7 +20,7 @@ public class JobTime {
     public JobTime() {
     }
 
-    public JobTime(String activity) {
+    public JobTime(final String activity) {
         this.activity = activity;
         startTime = new Date();
     }
@@ -30,7 +29,7 @@ public class JobTime {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
+    public void setStartTime(final Date startTime) {
         this.startTime = startTime;
     }
 
@@ -38,7 +37,7 @@ public class JobTime {
         return endTime;
     }
 
-    public void setEndTime(Date endTime) {
+    public void setEndTime(final Date endTime) {
         this.endTime = endTime;
     }
 
@@ -53,7 +52,7 @@ public class JobTime {
         return (endTime.getTime() - startTime.getTime()) / JobDescription.MS_TO_MIN;
     }
 
-    public void setActivity(String activity) {
+    public void setActivity(final String activity) {
         this.activity = activity;
     }
 }

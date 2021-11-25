@@ -11,7 +11,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 
 /**
- *
  * @author Cymric
  */
 public class ButtonTableCell<S> extends TableCell<S, Boolean> {
@@ -27,8 +26,8 @@ public class ButtonTableCell<S> extends TableCell<S, Boolean> {
         changeToStartButton();
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
-            public void handle(ActionEvent t) {
-                int i = getIndex();
+            public void handle(final ActionEvent t) {
+                final int i = getIndex();
                 if (STOP_BUTTON_NAME.equals(button.getText())) {
                     buttonPressedHandler.stopAction(i);
                 } else {
@@ -39,7 +38,7 @@ public class ButtonTableCell<S> extends TableCell<S, Boolean> {
     }
 
     @Override
-    public void updateItem(Boolean item, boolean empty) {
+    public void updateItem(final Boolean item, final boolean empty) {
         super.updateItem(item, empty);
         if (empty) {
             cleanCell();
@@ -71,8 +70,8 @@ public class ButtonTableCell<S> extends TableCell<S, Boolean> {
 
     public interface ButtonPressedEventHandler {
 
-        public abstract void stopAction(int row);
+        void stopAction(int row);
 
-        public abstract void startAction(int row);
+        void startAction(int row);
     }
 }

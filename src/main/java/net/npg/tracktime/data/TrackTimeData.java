@@ -4,16 +4,16 @@
  */
 package net.npg.tracktime.data;
 
-import java.util.ArrayList;
-import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- *
  * @author Cymric
  */
 @XmlRootElement(namespace = "net.npg.tracktime")
@@ -22,7 +22,7 @@ public class TrackTimeData {
     @XmlElementWrapper(name = "jobDescriptions")
     @XmlElement(name = "JobDescription")
     private List<JobDescription> jobDescriptions;
-    
+
     private ObservableList<JobDescription> observableJobDescriptions;
 
     public TrackTimeData() {
@@ -33,11 +33,11 @@ public class TrackTimeData {
         return jobDescriptions;
     }
 
-    protected void setJobDescriptions(List<JobDescription> jobDescriptions) {
+    protected void setJobDescriptions(final List<JobDescription> jobDescriptions) {
         this.jobDescriptions = jobDescriptions;
     }
 
-    public void addJobDescription(JobDescription jobDescription) {
+    public void addJobDescription(final JobDescription jobDescription) {
         observableJobDescriptions().add(jobDescription);
     }
 

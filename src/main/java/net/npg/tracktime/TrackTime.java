@@ -4,10 +4,6 @@
  */
 package net.npg.tracktime;
 
-import com.google.common.io.Resources;
-import net.npg.tracktime.data.JobDescription;
-import net.npg.tracktime.data.TrackTimeData;
-import net.npg.tracktime.data.JobStorage;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -23,12 +19,13 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
+import net.npg.tracktime.data.JobDescription;
+import net.npg.tracktime.data.JobStorage;
+import net.npg.tracktime.data.TrackTimeData;
 
-import java.net.URI;
 import java.net.URL;
 
 /**
- *
  * @author Cymric
  */
 public class TrackTime extends Application {
@@ -40,9 +37,10 @@ public class TrackTime extends Application {
      *
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         launch(args);
     }
+
     static public ObservableList<JobDescription> data;
     @FXML
     Scene root;
@@ -52,22 +50,22 @@ public class TrackTime extends Application {
 
     @Override
     public void start(final Stage stage) throws Exception {
-        ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-        URL location = classloader.getResource("TrackTime.fxml");
+        final ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+        final URL location = classloader.getResource("TrackTime.fxml");
         fxmlLoader = new FXMLLoader(location);
-        AnchorPane anchorPane = (AnchorPane) fxmlLoader.load();
+        final AnchorPane anchorPane = fxmlLoader.load();
         root = new Scene(anchorPane);
         stage.setScene(root);
 
         stage.setOnHiding(new EventHandler<WindowEvent>() {
             @Override
-            public void handle(WindowEvent event) {
+            public void handle(final WindowEvent event) {
                 quit();
             }
         });
 
         stage.setTitle("Zeiterfassung");
-        TrackTimeData defaultData = JobStorage.readFromStorage();
+        final TrackTimeData defaultData = JobStorage.readFromStorage();
         data = defaultData.observableJobDescriptions();
 
         ((TrackTimeController) fxmlLoader.getController()).setData(defaultData);
@@ -81,10 +79,10 @@ public class TrackTime extends Application {
         connectColumnWithProperty(tableView, "projectsColumn", "project");
         connectColumnWithProperty(tableView, "jobsColumn", "job");
         connectColumnWithProperty(tableView, "currentTimesColumn", "totalTime");
-        TableColumn startButtonsColumn = connectColumnWithProperty(tableView, "startButtonsColumn", "active");
+        final TableColumn startButtonsColumn = connectColumnWithProperty(tableView, "startButtonsColumn", "active");
         addStartButtonCellFactory(startButtonsColumn);
 
-        TableColumn currentActivityColumn = connectColumnWithProperty(tableView, "currentActivityColumn", "currentActivity");
+        final TableColumn currentActivityColumn = connectColumnWithProperty(tableView, "currentActivityColumn", "currentActivity");
         addActivityCellFactory(currentActivityColumn);
         tableView.setItems(data);
         //Enabling editing
@@ -95,8 +93,8 @@ public class TrackTime extends Application {
         return new ButtonTableCell<>(new StartButtonHandler());
     }
 
-    private TableColumn getColumn(TableView tableView, String name) {
-        for (TableColumn column : (ObservableList<TableColumn>) tableView.getColumns()) {
+    private static TableColumn getColumn(final TableView tableView, final String name) {
+        for (final TableColumn column : (ObservableList<TableColumn>) tableView.getColumns()) {
             if (column.getId().equals(name)) {
                 return column;
             }
@@ -104,11 +102,11 @@ public class TrackTime extends Application {
         throw new RuntimeException("Unknown column:" + name);
     }
 
-    public void startTimer(JobDescription job) {
+    public void startTimer(final JobDescription job) {
         ((TrackTimeController) fxmlLoader.getController()).startTimer(job, "");
     }
 
-    public void addActivity(JobDescription job, String newActivity) {
+    public void addActivity(final JobDescription job, final String newActivity) {
         ((TrackTimeController) fxmlLoader.getController()).addActivity(job, newActivity);
     }
 
@@ -116,29 +114,29 @@ public class TrackTime extends Application {
         ((TrackTimeController) fxmlLoader.getController()).quitAction(null);
     }
 
-    public void stopTimer(JobDescription job) {
+    public void stopTimer(final JobDescription job) {
         ((TrackTimeController) fxmlLoader.getController()).stopTimer(job);
     }
 
-    private TableColumn connectColumnWithProperty(TableView tableView, String columnName, String propertyName) {
-        TableColumn column = getColumn(tableView, columnName);
+    private static TableColumn connectColumnWithProperty(final TableView tableView, final String columnName, final String propertyName) {
+        final TableColumn column = getColumn(tableView, columnName);
         column.setCellValueFactory(new PropertyValueFactory(propertyName));
         return column;
     }
 
-    private void addStartButtonCellFactory(TableColumn startButtonsColumn) {
+    private void addStartButtonCellFactory(final TableColumn startButtonsColumn) {
         startButtonsColumn.setCellFactory(new Callback<TableColumn<JobDescription, Boolean>, TableCell<JobDescription, Boolean>>() {
             @Override
-            public TableCell<JobDescription, Boolean> call(TableColumn<JobDescription, Boolean> p) {
+            public TableCell<JobDescription, Boolean> call(final TableColumn<JobDescription, Boolean> p) {
                 return createButtonCell();
             }
         });
     }
 
-    private void addActivityCellFactory(TableColumn currentActivityColumn) {
+    private void addActivityCellFactory(final TableColumn currentActivityColumn) {
         currentActivityColumn.setCellFactory(new Callback<TableColumn<JobDescription, String>, TableCell<JobDescription, String>>() {
             @Override
-            public TableCell<JobDescription, String> call(TableColumn<JobDescription, String> p) {
+            public TableCell<JobDescription, String> call(final TableColumn<JobDescription, String> p) {
                 return createActivityCell();
             }
         });
@@ -151,7 +149,7 @@ public class TrackTime extends Application {
     private class ActivityFieldHandler implements TextFieldTableCell.TextAddEventHandler {
 
         @Override
-        public void addText(int row, String text) {
+        public void addText(final int row, final String text) {
             addActivity(TrackTime.data.get(row), text);
         }
     }
@@ -159,12 +157,12 @@ public class TrackTime extends Application {
     private class StartButtonHandler implements ButtonTableCell.ButtonPressedEventHandler {
 
         @Override
-        public void stopAction(int row) {
+        public void stopAction(final int row) {
             stopTimer(TrackTime.data.get(row));
         }
 
         @Override
-        public void startAction(int row) {
+        public void startAction(final int row) {
             startTimer(TrackTime.data.get(row));
         }
     }

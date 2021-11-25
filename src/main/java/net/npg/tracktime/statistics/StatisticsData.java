@@ -4,14 +4,9 @@
  */
 package net.npg.tracktime.statistics;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 /**
- *
  * @author Cymric
  */
 public class StatisticsData {
@@ -22,7 +17,7 @@ public class StatisticsData {
         return dailyStatistics;
     }
 
-    public void setDailyStatistics(List<DayStatisticsData> dailyStatistics) {
+    public void setDailyStatistics(final List<DayStatisticsData> dailyStatistics) {
         this.dailyStatistics = dailyStatistics;
     }
 
@@ -31,9 +26,9 @@ public class StatisticsData {
     }
 
     public Collection<String> getProjects() {
-        Collection<String> projects = new HashSet<>();
-        for (DayStatisticsData day : dailyStatistics) {
-            for (String project : day.getProjectStatistics().keySet()) {
+        final Collection<String> projects = new HashSet<>();
+        for (final DayStatisticsData day : dailyStatistics) {
+            for (final String project : day.getProjectStatistics().keySet()) {
                 projects.add(project);
             }
         }
@@ -41,15 +36,15 @@ public class StatisticsData {
     }
 
     public List<Date> getDays() {
-        List<Date> days = new ArrayList<>();
-        for (DayStatisticsData day : dailyStatistics) {
+        final List<Date> days = new ArrayList<>();
+        for (final DayStatisticsData day : dailyStatistics) {
             days.add(day.getDate());
         }
         return days;
     }
 
-    public DayStatisticsData getDay(Date date) {
-        for (DayStatisticsData day : dailyStatistics) {
+    public DayStatisticsData getDay(final Date date) {
+        for (final DayStatisticsData day : dailyStatistics) {
             if (day.getDate().equals(date)) {
                 return day;
             }

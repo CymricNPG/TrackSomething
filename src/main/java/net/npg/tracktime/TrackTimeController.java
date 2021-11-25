@@ -4,25 +4,25 @@
  */
 package net.npg.tracktime;
 
-import net.npg.tracktime.data.JobTime;
-import net.npg.tracktime.data.JobDescription;
-import net.npg.tracktime.data.TrackTimeData;
-import java.net.URL;
-import java.util.Date;
-import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import javax.swing.JOptionPane;
+import net.npg.tracktime.data.JobDescription;
 import net.npg.tracktime.data.JobStorage;
-import net.npg.tracktime.statistics.StatisticsView;
+import net.npg.tracktime.data.JobTime;
+import net.npg.tracktime.data.TrackTimeData;
 import net.npg.tracktime.statistics.StatisticsCreator;
+import net.npg.tracktime.statistics.StatisticsView;
+
+import javax.swing.*;
+import java.net.URL;
+import java.util.Date;
+import java.util.ResourceBundle;
 
 /**
- *
  * @author Cymric
  */
 public class TrackTimeController implements Initializable {
@@ -38,43 +38,42 @@ public class TrackTimeController implements Initializable {
     private TrackTimeData data;
 
     @FXML
-    public void quitAction(ActionEvent event) {
+    public void quitAction(final ActionEvent event) {
         stopAction(event);
         saveAction(event);
-        System.err.println("Servus");
         System.exit(1);
     }
 
     @FXML
-    public void statisticsAction(ActionEvent event) throws Exception {
-        Stage stage = new Stage();
-        StatisticsView statisticsView = new StatisticsView(StatisticsCreator.create(data));
+    public void statisticsAction(final ActionEvent event) throws Exception {
+        final Stage stage = new Stage();
+        final StatisticsView statisticsView = new StatisticsView(StatisticsCreator.create(data));
         statisticsView.start(stage);
     }
 
     @FXML
-    public void saveAction(ActionEvent event) {
+    public void saveAction(final ActionEvent event) {
         try {
             JobStorage.writeToStorage(data);
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             ex.printStackTrace();
         }
     }
 
     @FXML
-    public void resetAction(ActionEvent event) {
-        int showConfirmDialog = JOptionPane.showConfirmDialog(null, "Daten zurücksetzen?");
+    public void resetAction(final ActionEvent event) {
+        final int showConfirmDialog = JOptionPane.showConfirmDialog(null, "Daten zurücksetzen?");
         if (showConfirmDialog != JOptionPane.OK_OPTION) {
             return;
         }
         stopAction(event);
-        for (JobDescription job : data.getJobDescriptions()) {
+        for (final JobDescription job : data.getJobDescriptions()) {
             job.resetJobTimes();
         }
     }
 
     @FXML
-    public void addJobAction(ActionEvent event) {
+    public void addJobAction(final ActionEvent event) {
         if (isFieldEmpty(projectField) || isFieldEmpty(jobField)) {
             System.out.println("Fields are empty!");
             return;
@@ -91,7 +90,7 @@ public class TrackTimeController implements Initializable {
     }
 
     @FXML
-    private void stopAction(ActionEvent event) {
+    private void stopAction(final ActionEvent event) {
         if (currentJobTime == null) {
             return;
         }
@@ -104,7 +103,7 @@ public class TrackTimeController implements Initializable {
         currentJob = null;
     }
 
-    void startTimer(JobDescription job, String activityName) {
+    void startTimer(final JobDescription job, final String activityName) {
         closeCurrentJobTime();
         currentJob = job;
         currentJob.setActive(Boolean.TRUE);
@@ -114,20 +113,20 @@ public class TrackTimeController implements Initializable {
     }
 
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(final URL url, final ResourceBundle rb) {
         //TODO
     }
 
-    void setData(TrackTimeData data) {
+    void setData(final TrackTimeData data) {
         this.data = data;
     }
 
-    private boolean isFieldEmpty(TextField field) {
+    private static boolean isFieldEmpty(final TextField field) {
         return field == null || field.getText() == null || field.getText().trim().isEmpty();
     }
 
-    private boolean alreadyExists(String projectText, String jobText) {
-        for (JobDescription job : data.getJobDescriptions()) {
+    private boolean alreadyExists(final String projectText, final String jobText) {
+        for (final JobDescription job : data.getJobDescriptions()) {
             if (job.getJob().equals(jobText) && job.getProject().equals(projectText)) {
                 return true;
             }
@@ -135,11 +134,11 @@ public class TrackTimeController implements Initializable {
         return false;
     }
 
-    void stopTimer(JobDescription job) {
+    void stopTimer(final JobDescription job) {
         closeCurrentJobTime();
     }
 
-    void addActivity(JobDescription job, String newActivityDescription) {
+    void addActivity(final JobDescription job, final String newActivityDescription) {
         System.out.println("Current Activity:" + job.currentActivityProperty().getValue());
         closeCurrentJobTime();
         startTimer(job, newActivityDescription);

@@ -11,23 +11,22 @@ import java.util.Date;
 import java.util.TreeSet;
 
 /**
- *
  * @author Cymric
  */
 public class DateUtil {
 
     private static final DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT);
 
-    public static String shortDate(Date date) {
+    public static String shortDate(final Date date) {
         return dateFormat.format(date);
     }
 
     public static Comparator<Date> dailyComparator() {
         return new Comparator<Date>() {
             @Override
-            public int compare(Date o1, Date o2) {
-                String date1 = DateUtil.shortDate(o1);
-                String date2 = DateUtil.shortDate(o2);
+            public int compare(final Date o1, final Date o2) {
+                final String date1 = DateUtil.shortDate(o1);
+                final String date2 = DateUtil.shortDate(o2);
                 if (date1.equals(date2)) {
                     return 0;
                 } else {

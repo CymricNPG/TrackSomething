@@ -4,25 +4,12 @@
  */
 package net.npg.tracktime.data;
 
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.LongProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleLongProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlRootElement;
+import javafx.beans.property.*;
+
+import javax.xml.bind.annotation.*;
+import java.util.*;
 
 /**
- *
  * @author Cymric
  */
 @XmlRootElement()
@@ -32,9 +19,9 @@ public class JobDescription {
     private String project;
     private String job;
     private List<JobTime> jobTimes;
-    private BooleanProperty active;
-    private LongProperty totalTime;
-    private StringProperty currentActivity;
+    private final BooleanProperty active;
+    private final LongProperty totalTime;
+    private final StringProperty currentActivity;
 
     JobDescription() {
         totalTime = new SimpleLongProperty();
@@ -42,7 +29,7 @@ public class JobDescription {
         currentActivity = new SimpleStringProperty();
     }
 
-    public JobDescription(String project, String job) {
+    public JobDescription(final String project, final String job) {
         this.project = project;
         this.job = job;
         jobTimes = new LinkedList<>();
@@ -63,7 +50,7 @@ public class JobDescription {
         return currentActivity;
     }
 
-    public void setActive(Boolean active) {
+    public void setActive(final Boolean active) {
         this.active.setValue(active);
     }
 
@@ -73,12 +60,12 @@ public class JobDescription {
 
     @XmlElementWrapper(name = "jobTimes")
     @XmlElement(name = "JobTime")
-    protected void setJobTimes(List<JobTime> jobTimes) {
+    protected void setJobTimes(final List<JobTime> jobTimes) {
         this.jobTimes = jobTimes;
         updateTimes();
     }
 
-    public void addjobTime(JobTime jobTime) {
+    public void addjobTime(final JobTime jobTime) {
         jobTimes.add(jobTime);
     }
 
@@ -86,7 +73,7 @@ public class JobDescription {
         return project;
     }
 
-    public void setProject(String project) {
+    public void setProject(final String project) {
         this.project = project;
     }
 
@@ -94,9 +81,10 @@ public class JobDescription {
         return job;
     }
 
-    public void setJob(String job) {
+    public void setJob(final String job) {
         this.job = job;
     }
+
     public static final long MS_TO_MIN = 1000L * 60L;
 
     /**
@@ -108,10 +96,10 @@ public class JobDescription {
         return totalTime.getValue();
     }
 
-    public Long getTotalTime(Date date) {
-        Comparator<Date> dailyComparator = DateUtil.dailyComparator();
+    public Long getTotalTime(final Date date) {
+        final Comparator<Date> dailyComparator = DateUtil.dailyComparator();
         long totalDayTime = 0;
-        for (JobTime jobTime : getJobTimes()) {
+        for (final JobTime jobTime : getJobTimes()) {
             if (dailyComparator.compare(date, jobTime.getStartTime()) == 0) {
                 totalDayTime += jobTime.getDuration();
             }
@@ -120,8 +108,8 @@ public class JobDescription {
     }
 
     public Collection<Date> getDays() {
-        Collection<Date> dates = DateUtil.dailySorted();
-        for (JobTime jobTime : getJobTimes()) {
+        final Collection<Date> dates = DateUtil.dailySorted();
+        for (final JobTime jobTime : getJobTimes()) {
             dates.add(jobTime.getStartTime());
         }
         return dates;
@@ -133,7 +121,7 @@ public class JobDescription {
 
     public void updateTimes() {
         Long time = 0L;
-        for (JobTime jobTime : jobTimes) {
+        for (final JobTime jobTime : jobTimes) {
             time += jobTime.getDuration();
         }
         totalTime.setValue(time);

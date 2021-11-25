@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
  * @author Cymric
  */
 class DayStatisticsData {
@@ -21,11 +20,11 @@ class DayStatisticsData {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(final Date date) {
         this.date = date;
     }
 
-    public DayStatisticsData(Date date) {
+    public DayStatisticsData(final Date date) {
         this.projectStatistics = new HashMap<>();
         this.date = date;
     }
@@ -34,7 +33,7 @@ class DayStatisticsData {
         return projectStatistics;
     }
 
-    public void setProjectStatistics(Map<String, Long> projectStatistics) {
+    public void setProjectStatistics(final Map<String, Long> projectStatistics) {
         this.projectStatistics = projectStatistics;
     }
 }

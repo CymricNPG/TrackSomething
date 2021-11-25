@@ -11,12 +11,9 @@ import javafx.geometry.Pos;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TextField;
-import static javafx.scene.input.KeyCode.ENTER;
-import static javafx.scene.input.KeyCode.ESCAPE;
 import javafx.scene.input.KeyEvent;
 
 /**
- *
  * @author Cymric
  */
 public class TextFieldTableCell<S> extends TableCell<S, String> {
@@ -31,7 +28,7 @@ public class TextFieldTableCell<S> extends TableCell<S, String> {
         setGraphic(textField);
         textField.focusedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
-            public void changed(ObservableValue<? extends Boolean> ov, Boolean t, Boolean t1) {
+            public void changed(final ObservableValue<? extends Boolean> ov, final Boolean t, final Boolean t1) {
                 if (!ov.getValue()) {
                     textField.setText("");
                 }
@@ -39,7 +36,7 @@ public class TextFieldTableCell<S> extends TableCell<S, String> {
         });
         textField.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
-            public void handle(KeyEvent t) {
+            public void handle(final KeyEvent t) {
                 if (t == null) {
                     return;
                 }
@@ -48,7 +45,7 @@ public class TextFieldTableCell<S> extends TableCell<S, String> {
                         if (textField.getText() == null || textField.getText().trim().length() == 0) {
                             break;
                         }
-                        int i = getIndex();
+                        final int i = getIndex();
                         textHandler.addText(i, textField.getText());
                         textField.setText("");
                         break;
@@ -78,11 +75,11 @@ public class TextFieldTableCell<S> extends TableCell<S, String> {
     }
 
     private String getString() {
-        return getItem() == null ? "" : getItem().toString();
+        return getItem() == null ? "" : getItem();
     }
 
     @Override
-    public void updateItem(String item, boolean empty) {
+    public void updateItem(final String item, final boolean empty) {
         super.updateItem(item, empty);
         if (empty) {
             setGraphic(textField);
@@ -96,6 +93,6 @@ public class TextFieldTableCell<S> extends TableCell<S, String> {
 
     public interface TextAddEventHandler {
 
-        public void addText(int row, String text);
+        void addText(int row, String text);
     }
 }
