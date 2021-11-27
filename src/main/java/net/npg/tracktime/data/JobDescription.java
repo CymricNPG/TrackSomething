@@ -6,14 +6,11 @@ package net.npg.tracktime.data;
 
 import javafx.beans.property.*;
 
-import javax.xml.bind.annotation.*;
 import java.util.*;
 
 /**
  * @author Cymric
  */
-@XmlRootElement()
-@XmlAccessorType(XmlAccessType.PROPERTY)
 public class JobDescription {
 
     private String project;
@@ -57,9 +54,7 @@ public class JobDescription {
     public List<JobTime> getJobTimes() {
         return jobTimes;
     }
-
-    @XmlElementWrapper(name = "jobTimes")
-    @XmlElement(name = "JobTime")
+    
     protected void setJobTimes(final List<JobTime> jobTimes) {
         this.jobTimes = jobTimes;
         updateTimes();

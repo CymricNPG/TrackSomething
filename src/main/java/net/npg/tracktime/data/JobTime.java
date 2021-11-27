@@ -4,13 +4,13 @@
  */
 package net.npg.tracktime.data;
 
-import javax.xml.bind.annotation.XmlRootElement;
+
 import java.util.Date;
 
 /**
  * @author Cymric
  */
-@XmlRootElement()
+
 public class JobTime {
 
     private Date startTime;

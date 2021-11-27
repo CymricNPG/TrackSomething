@@ -7,20 +7,15 @@ package net.npg.tracktime.data;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author Cymric
  */
-@XmlRootElement(namespace = "net.npg.tracktime")
+
 public class TrackTimeData {
 
-    @XmlElementWrapper(name = "jobDescriptions")
-    @XmlElement(name = "JobDescription")
     private List<JobDescription> jobDescriptions;
 
     private ObservableList<JobDescription> observableJobDescriptions;

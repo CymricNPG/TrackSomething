@@ -22,23 +22,18 @@ import javafx.util.Callback;
 import net.npg.tracktime.data.JobDescription;
 import net.npg.tracktime.data.JobStorage;
 import net.npg.tracktime.data.TrackTimeData;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.net.URL;
 
 /**
  * @author Cymric
  */
+@SpringBootApplication
 public class TrackTime extends Application {
 
-    /**
-     * The main() method is ignored in correctly deployed JavaFX application. main() serves only as fallback in case the
-     * application can not be launched through deployment artifacts, e.g., in IDEs with limited FX support. NetBeans
-     * ignores main().
-     *
-     * @param args the command line arguments
-     */
     public static void main(final String[] args) {
-        launch(args);
+        Application.launch(TrackTime.class, args);
     }
 
     static public ObservableList<JobDescription> data;
