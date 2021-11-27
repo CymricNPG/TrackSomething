@@ -30,7 +30,7 @@ public class JobStorage {
         return new TrackTimeData(new ArrayList<>());
     }
 
-    public static File getStorageFile() {
+    private static File getStorageFile() {
         final File file = new File(System.getProperty("user.home") + System.getProperty("file.separator") + "trackTime.json");
         System.out.println(file.getAbsolutePath());
         return file;

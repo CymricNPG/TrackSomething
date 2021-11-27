@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * @author Cymric
  */
-public record JobDescription(String project,
-                             String job,
-                             List<JobTime> jobTimes) {
+public record JobDescriptionData(String project,
+                                 String job,
+                                 List<JobTimeData> jobTimes) {
 }

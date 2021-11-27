@@ -11,7 +11,7 @@ import java.util.Date;
  * @author Cymric
  */
 
-public record JobTime(Date startTime,
-                      Date endTime,
-                      String activity) {
+public record JobTimeData(Date startTime,
+                          Date endTime,
+                          String activity) {
 }

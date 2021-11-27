@@ -4,35 +4,30 @@
  */
 package net.npg.tracktime;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
+import org.apache.commons.lang3.BooleanUtils;
 
 /**
  * @author Cymric
  */
 public class ButtonTableCell<S> extends TableCell<S, Boolean> {
 
-    public static final String STOP_BUTTON_NAME = "Stop";
-    public static final String START_BUTTON_NAME = "Start";
+    private static final String STOP_BUTTON_NAME = "Stop";
+    private static final String START_BUTTON_NAME = "Start";
     private final Button button;
 
-    public ButtonTableCell(final ButtonPressedEventHandler buttonPressedHandler) {
+    ButtonTableCell(final ButtonPressedEventHandler buttonPressedHandler) {
         this.button = new Button();
         this.button.setAlignment(Pos.CENTER);
         setAlignment(Pos.CENTER);
         changeToStartButton();
-        button.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(final ActionEvent t) {
-                final int i = getIndex();
-                if (STOP_BUTTON_NAME.equals(button.getText())) {
-                    buttonPressedHandler.stopAction(i);
-                } else {
-                    buttonPressedHandler.startAction(i);
-                }
+        button.setOnAction(t -> {
+            if (STOP_BUTTON_NAME.equals(button.getText())) {
+                buttonPressedHandler.stopAction(getIndex());
+            } else {
+                buttonPressedHandler.startAction(getIndex());
             }
         });
     }
@@ -43,7 +38,7 @@ public class ButtonTableCell<S> extends TableCell<S, Boolean> {
         if (empty) {
             cleanCell();
         } else {
-            if (item) {
+            if (BooleanUtils.isTrue(item)) {
                 changeToStopButton();
             } else {
                 changeToStartButton();
@@ -69,7 +64,6 @@ public class ButtonTableCell<S> extends TableCell<S, Boolean> {
     }
 
     public interface ButtonPressedEventHandler {
-
         void stopAction(int row);
 
         void startAction(int row);

@@ -1,7 +1,7 @@
 package net.npg.tracktime.model;
 
-import net.npg.tracktime.data.JobDescription;
-import net.npg.tracktime.data.JobTime;
+import net.npg.tracktime.data.JobDescriptionData;
+import net.npg.tracktime.data.JobTimeData;
 import net.npg.tracktime.data.TrackTimeData;
 
 import java.util.List;
@@ -20,7 +20,7 @@ public final class ModelConversion {
         return trackTimeDataModel;
     }
 
-    private static JobDescriptionModel convert(final JobDescription jd) {
+    private static JobDescriptionModel convert(final JobDescriptionData jd) {
         final JobDescriptionModel jobDescriptionModel = new JobDescriptionModel(jd.project(), jd.job());
         jd.jobTimes().stream()
                 .map(jt -> new JobTimeModel(jt.startTime(), jt.endTime(), jt.activity()))
@@ -29,16 +29,16 @@ public final class ModelConversion {
     }
 
     public static TrackTimeData convert(final TrackTimeDataModel data) {
-        final List<JobDescription> jobDescriptions = data.getJobDescriptions().stream()
-                .map(jd -> new JobDescription(jd.getProject(), jd.getJob(),
+        final List<JobDescriptionData> jobDescriptionData = data.getJobDescriptions().stream()
+                .map(jd -> new JobDescriptionData(jd.getProject(), jd.getJob(),
                         convert(jd.getJobTimes())))
                 .collect(Collectors.toList());
-        return new TrackTimeData(jobDescriptions);
+        return new TrackTimeData(jobDescriptionData);
     }
 
-    private static List<JobTime> convert(final List<JobTimeModel> jobTimes) {
+    private static List<JobTimeData> convert(final List<JobTimeModel> jobTimes) {
         return jobTimes.stream()
-                .map(jt -> new JobTime(jt.getStartTime(), jt.getEndTime(), jt.getActivity()))
+                .map(jt -> new JobTimeData(jt.getStartTime(), jt.getEndTime(), jt.getActivity()))
                 .collect(Collectors.toList());
     }
 

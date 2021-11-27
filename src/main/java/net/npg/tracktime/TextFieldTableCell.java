@@ -12,6 +12,7 @@ import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author Cymric
@@ -20,7 +21,7 @@ public class TextFieldTableCell<S> extends TableCell<S, String> {
 
     private final TextField textField;
 
-    public TextFieldTableCell(final TextAddEventHandler textHandler) {
+    TextFieldTableCell(final TextAddEventHandler textHandler) {
         this.textField = new TextField();
         textField.setStyle("-fx-base: red;");
         textField.setEditable(true);
@@ -42,7 +43,7 @@ public class TextFieldTableCell<S> extends TableCell<S, String> {
                 }
                 switch (t.getCode()) {
                     case ENTER:
-                        if (textField.getText() == null || textField.getText().trim().length() == 0) {
+                        if (StringUtils.isEmpty(textField.getText())) {
                             break;
                         }
                         final int i = getIndex();
@@ -81,18 +82,15 @@ public class TextFieldTableCell<S> extends TableCell<S, String> {
     @Override
     public void updateItem(final String item, final boolean empty) {
         super.updateItem(item, empty);
-        if (empty) {
-            setGraphic(textField);
-            setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-        } else {
+        if (!empty) {
             textField.setText(getString());
-            setGraphic(textField);
-            setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
         }
+        setGraphic(textField);
+        setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
     }
 
+    @FunctionalInterface
     public interface TextAddEventHandler {
-
         void addText(int row, String text);
     }
 }

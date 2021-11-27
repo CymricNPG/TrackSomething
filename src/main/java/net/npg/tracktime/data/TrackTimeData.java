@@ -10,5 +10,5 @@ import java.util.List;
  * @author Cymric
  */
 
-public record TrackTimeData(List<JobDescription> jobDescriptions) {
+public record TrackTimeData(List<JobDescriptionData> jobDescriptions) {
 }
