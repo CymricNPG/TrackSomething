@@ -6,23 +6,18 @@ package net.npg.tracktime;
 
 import javafx.application.Application;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
-import javafx.util.Callback;
 import net.npg.tracktime.data.JobStorage;
 import net.npg.tracktime.model.JobDescriptionModel;
 import net.npg.tracktime.model.ModelConversion;
-import net.npg.tracktime.model.TrackTimeDataModel;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 
@@ -33,7 +28,7 @@ import java.net.URL;
  */
 public class TrackTimeUI extends Application {
 
-    static public ObservableList<JobDescriptionModel> data;
+    private ObservableList<JobDescriptionModel> data;
     @FXML
     Scene root;
     @FXML
@@ -62,20 +57,14 @@ public class TrackTimeUI extends Application {
         root = new Scene(anchorPane);
         stage.setScene(root);
 
-        stage.setOnHiding(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(final WindowEvent event) {
-                quit();
-            }
-        });
+        stage.setOnHiding(event -> quit());
 
         stage.setTitle("Zeiterfassung");
-        final TrackTimeDataModel defaultData = ModelConversion.convert(JobStorage.readFromStorage());
+        final var defaultData = ModelConversion.convert(JobStorage.readFromStorage());
         data = defaultData.observableJobDescriptions();
 
         ((TrackTimeController) fxmlLoader.getController()).setData(defaultData);
 
-        //  tableView =                 lookup(parentNode,"#ScrollJobs",ScrollPane.class);
         tableView = (TableView) root.lookup("#tableView");
         if (tableView == null) {
             throw new RuntimeException("Tableview not found");
@@ -95,10 +84,6 @@ public class TrackTimeUI extends Application {
     }
 
 
-    private TableCell<JobDescriptionModel, Boolean> createButtonCell() {
-        return new ButtonTableCell<>(new StartButtonHandler());
-    }
-
     private static TableColumn getColumn(final TableView tableView, final String name) {
         for (final TableColumn column : (ObservableList<TableColumn>) tableView.getColumns()) {
             if (column.getId().equals(name)) {
@@ -108,19 +93,19 @@ public class TrackTimeUI extends Application {
         throw new RuntimeException("Unknown column:" + name);
     }
 
-    public void startTimer(final JobDescriptionModel job) {
+    private void startTimer(final JobDescriptionModel job) {
         ((TrackTimeController) fxmlLoader.getController()).startTimer(job, "");
     }
 
-    public void addActivity(final JobDescriptionModel job, final String newActivity) {
+    private void addActivity(final JobDescriptionModel job, final String newActivity) {
         ((TrackTimeController) fxmlLoader.getController()).addActivity(job, newActivity);
     }
 
-    public void quit() {
+    private void quit() {
         ((TrackTimeController) fxmlLoader.getController()).quitAction(null);
     }
 
-    public void stopTimer(final JobDescriptionModel job) {
+    private void stopTimer(final JobDescriptionModel job) {
         ((TrackTimeController) fxmlLoader.getController()).stopTimer(job);
     }
 
@@ -131,45 +116,42 @@ public class TrackTimeUI extends Application {
     }
 
     private void addStartButtonCellFactory(final TableColumn startButtonsColumn) {
-        startButtonsColumn.setCellFactory(new Callback<TableColumn<JobDescriptionModel, Boolean>, TableCell<JobDescriptionModel, Boolean>>() {
-            @Override
-            public TableCell<JobDescriptionModel, Boolean> call(final TableColumn<JobDescriptionModel, Boolean> p) {
-                return createButtonCell();
-            }
-        });
+        startButtonsColumn.setCellFactory(p -> new ButtonTableCell<>(new StartButtonHandler(data)));
     }
 
     private void addActivityCellFactory(final TableColumn currentActivityColumn) {
-        currentActivityColumn.setCellFactory(new Callback<TableColumn<JobDescriptionModel, String>, TableCell<JobDescriptionModel, String>>() {
-            @Override
-            public TableCell<JobDescriptionModel, String> call(final TableColumn<JobDescriptionModel, String> p) {
-                return createActivityCell();
-            }
-        });
-    }
-
-    private TableCell<JobDescriptionModel, String> createActivityCell() {
-        return new TextFieldTableCell<>(new ActivityFieldHandler());
+        currentActivityColumn.setCellFactory(p -> new TextFieldTableCell<>(new ActivityFieldHandler(data)));
     }
 
     private class ActivityFieldHandler implements TextFieldTableCell.TextAddEventHandler {
 
+        private final ObservableList<JobDescriptionModel> data;
+
+        public ActivityFieldHandler(final ObservableList<JobDescriptionModel> data) {
+            this.data = data;
+        }
+
         @Override
         public void addText(final int row, final String text) {
-            addActivity(TrackTimeUI.data.get(row), text);
+            addActivity(data.get(row), text);
         }
     }
 
     private class StartButtonHandler implements ButtonTableCell.ButtonPressedEventHandler {
+        private final ObservableList<JobDescriptionModel> data;
+
+        StartButtonHandler(final ObservableList<JobDescriptionModel> data) {
+            this.data = data;
+        }
 
         @Override
         public void stopAction(final int row) {
-            stopTimer(TrackTimeUI.data.get(row));
+            stopTimer(data.get(row));
         }
 
         @Override
         public void startAction(final int row) {
-            startTimer(TrackTimeUI.data.get(row));
+            startTimer(data.get(row));
         }
     }
 }

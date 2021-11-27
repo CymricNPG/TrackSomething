@@ -7,20 +7,16 @@ package net.npg.tracktime.statistics;
 import javafx.application.Application;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
-import javafx.util.Callback;
 import net.npg.tracktime.model.DateUtil;
+import org.apache.commons.lang3.StringUtils;
 
 import java.net.URL;
 import java.util.Collection;
@@ -50,11 +46,8 @@ public class StatisticsView extends Application {
         root = new Scene(anchorPane);
         stage.setScene(root);
 
-        stage.setOnHiding(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(final WindowEvent event) {
-                //closed
-            }
+        stage.setOnHiding(event -> {
+            //closed
         });
 
         stage.setTitle("Zeitübersicht");
@@ -100,26 +93,21 @@ public class StatisticsView extends Application {
             final int columnIndex, final String columnTitle, final double width) {
         final TableColumn<ObservableList<StringProperty>, String> column = new TableColumn();
         final String title;
-        if (columnTitle == null || columnTitle.trim().length() == 0) {
+        if (StringUtils.isEmpty(columnTitle)) {
             title = "Column " + (columnIndex + 1);
         } else {
             title = columnTitle;
         }
         column.setText(title);
         column.setPrefWidth(width);
-        column
-                .setCellValueFactory(new Callback<CellDataFeatures<ObservableList<StringProperty>, String>, ObservableValue<String>>() {
-                    @Override
-                    public ObservableValue<String> call(
-                            final CellDataFeatures<ObservableList<StringProperty>, String> cellDataFeatures) {
-                        final ObservableList<StringProperty> values = cellDataFeatures.getValue();
-                        if (columnIndex >= values.size()) {
-                            return new SimpleStringProperty("");
-                        } else {
-                            return cellDataFeatures.getValue().get(columnIndex);
-                        }
-                    }
-                });
+        column.setCellValueFactory(cellDataFeatures -> {
+            final ObservableList<StringProperty> values = cellDataFeatures.getValue();
+            if (columnIndex >= values.size()) {
+                return new SimpleStringProperty("");
+            } else {
+                return cellDataFeatures.getValue().get(columnIndex);
+            }
+        });
         return column;
     }
 }

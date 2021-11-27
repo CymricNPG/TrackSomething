@@ -16,7 +16,7 @@ class DayStatisticsData {
     private Map<String, Long> projectStatistics;
     private Date date;
 
-    public Date getDate() {
+    Date getDate() {
         return date;
     }
 
@@ -24,16 +24,16 @@ class DayStatisticsData {
         this.date = date;
     }
 
-    public DayStatisticsData(final Date date) {
+    DayStatisticsData(final Date date) {
         this.projectStatistics = new HashMap<>();
         this.date = date;
     }
 
-    public Map<String, Long> getProjectStatistics() {
+    Map<String, Long> getProjectStatistics() {
         return projectStatistics;
     }
 
-    public void setProjectStatistics(final Map<String, Long> projectStatistics) {
+    void setProjectStatistics(final Map<String, Long> projectStatistics) {
         this.projectStatistics = projectStatistics;
     }
 }
