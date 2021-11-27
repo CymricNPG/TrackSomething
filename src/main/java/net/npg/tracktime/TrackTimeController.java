@@ -10,10 +10,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import net.npg.tracktime.data.JobDescription;
 import net.npg.tracktime.data.JobStorage;
-import net.npg.tracktime.data.JobTime;
-import net.npg.tracktime.data.TrackTimeData;
+import net.npg.tracktime.model.JobDescriptionModel;
+import net.npg.tracktime.model.JobTimeModel;
+import net.npg.tracktime.model.ModelConversion;
+import net.npg.tracktime.model.TrackTimeDataModel;
 import net.npg.tracktime.statistics.StatisticsCreator;
 import net.npg.tracktime.statistics.StatisticsView;
 
@@ -33,9 +34,9 @@ public class TrackTimeController implements Initializable {
     private TextField projectField;
     @FXML
     private TextField jobField;
-    private JobTime currentJobTime;
-    private JobDescription currentJob;
-    private TrackTimeData data;
+    private JobTimeModel currentJobTime;
+    private JobDescriptionModel currentJob;
+    private TrackTimeDataModel data;
 
     @FXML
     public void quitAction(final ActionEvent event) {
@@ -54,11 +55,12 @@ public class TrackTimeController implements Initializable {
     @FXML
     public void saveAction(final ActionEvent event) {
         try {
-            JobStorage.writeToStorage(data);
+            JobStorage.writeToStorage(ModelConversion.convert(data));
         } catch (final Exception ex) {
             ex.printStackTrace();
         }
     }
+
 
     @FXML
     public void resetAction(final ActionEvent event) {
@@ -67,7 +69,7 @@ public class TrackTimeController implements Initializable {
             return;
         }
         stopAction(event);
-        for (final JobDescription job : data.getJobDescriptions()) {
+        for (final JobDescriptionModel job : data.getJobDescriptions()) {
             job.resetJobTimes();
         }
     }
@@ -84,7 +86,7 @@ public class TrackTimeController implements Initializable {
             System.out.println("Fields already exists!");
             return;
         }
-        data.addJobDescription(new JobDescription(projectText, jobText));
+        data.addJobDescription(new JobDescriptionModel(projectText, jobText));
         projectField.setText("");
         jobField.setText("");
     }
@@ -103,12 +105,12 @@ public class TrackTimeController implements Initializable {
         currentJob = null;
     }
 
-    void startTimer(final JobDescription job, final String activityName) {
+    void startTimer(final JobDescriptionModel job, final String activityName) {
         closeCurrentJobTime();
         currentJob = job;
         currentJob.setActive(Boolean.TRUE);
         currentJobLabel.setText(job.getProject() + "/" + job.getJob() + ":" + activityName);
-        currentJobTime = new JobTime(activityName);
+        currentJobTime = new JobTimeModel(activityName);
         job.addjobTime(currentJobTime);
     }
 
@@ -117,7 +119,7 @@ public class TrackTimeController implements Initializable {
         //TODO
     }
 
-    void setData(final TrackTimeData data) {
+    void setData(final TrackTimeDataModel data) {
         this.data = data;
     }
 
@@ -126,7 +128,7 @@ public class TrackTimeController implements Initializable {
     }
 
     private boolean alreadyExists(final String projectText, final String jobText) {
-        for (final JobDescription job : data.getJobDescriptions()) {
+        for (final JobDescriptionModel job : data.getJobDescriptions()) {
             if (job.getJob().equals(jobText) && job.getProject().equals(projectText)) {
                 return true;
             }
@@ -134,11 +136,11 @@ public class TrackTimeController implements Initializable {
         return false;
     }
 
-    void stopTimer(final JobDescription job) {
+    void stopTimer(final JobDescriptionModel job) {
         closeCurrentJobTime();
     }
 
-    void addActivity(final JobDescription job, final String newActivityDescription) {
+    void addActivity(final JobDescriptionModel job, final String newActivityDescription) {
         System.out.println("Current Activity:" + job.currentActivityProperty().getValue());
         closeCurrentJobTime();
         startTimer(job, newActivityDescription);

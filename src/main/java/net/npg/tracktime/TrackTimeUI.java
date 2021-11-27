@@ -19,9 +19,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
-import net.npg.tracktime.data.JobDescription;
 import net.npg.tracktime.data.JobStorage;
-import net.npg.tracktime.data.TrackTimeData;
+import net.npg.tracktime.model.JobDescriptionModel;
+import net.npg.tracktime.model.ModelConversion;
+import net.npg.tracktime.model.TrackTimeDataModel;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 
@@ -32,7 +33,7 @@ import java.net.URL;
  */
 public class TrackTimeUI extends Application {
 
-    static public ObservableList<JobDescription> data;
+    static public ObservableList<JobDescriptionModel> data;
     @FXML
     Scene root;
     @FXML
@@ -69,7 +70,7 @@ public class TrackTimeUI extends Application {
         });
 
         stage.setTitle("Zeiterfassung");
-        final TrackTimeData defaultData = JobStorage.readFromStorage();
+        final TrackTimeDataModel defaultData = ModelConversion.convert(JobStorage.readFromStorage());
         data = defaultData.observableJobDescriptions();
 
         ((TrackTimeController) fxmlLoader.getController()).setData(defaultData);
@@ -93,7 +94,8 @@ public class TrackTimeUI extends Application {
         stage.show();
     }
 
-    private TableCell<JobDescription, Boolean> createButtonCell() {
+
+    private TableCell<JobDescriptionModel, Boolean> createButtonCell() {
         return new ButtonTableCell<>(new StartButtonHandler());
     }
 
@@ -106,11 +108,11 @@ public class TrackTimeUI extends Application {
         throw new RuntimeException("Unknown column:" + name);
     }
 
-    public void startTimer(final JobDescription job) {
+    public void startTimer(final JobDescriptionModel job) {
         ((TrackTimeController) fxmlLoader.getController()).startTimer(job, "");
     }
 
-    public void addActivity(final JobDescription job, final String newActivity) {
+    public void addActivity(final JobDescriptionModel job, final String newActivity) {
         ((TrackTimeController) fxmlLoader.getController()).addActivity(job, newActivity);
     }
 
@@ -118,7 +120,7 @@ public class TrackTimeUI extends Application {
         ((TrackTimeController) fxmlLoader.getController()).quitAction(null);
     }
 
-    public void stopTimer(final JobDescription job) {
+    public void stopTimer(final JobDescriptionModel job) {
         ((TrackTimeController) fxmlLoader.getController()).stopTimer(job);
     }
 
@@ -129,24 +131,24 @@ public class TrackTimeUI extends Application {
     }
 
     private void addStartButtonCellFactory(final TableColumn startButtonsColumn) {
-        startButtonsColumn.setCellFactory(new Callback<TableColumn<JobDescription, Boolean>, TableCell<JobDescription, Boolean>>() {
+        startButtonsColumn.setCellFactory(new Callback<TableColumn<JobDescriptionModel, Boolean>, TableCell<JobDescriptionModel, Boolean>>() {
             @Override
-            public TableCell<JobDescription, Boolean> call(final TableColumn<JobDescription, Boolean> p) {
+            public TableCell<JobDescriptionModel, Boolean> call(final TableColumn<JobDescriptionModel, Boolean> p) {
                 return createButtonCell();
             }
         });
     }
 
     private void addActivityCellFactory(final TableColumn currentActivityColumn) {
-        currentActivityColumn.setCellFactory(new Callback<TableColumn<JobDescription, String>, TableCell<JobDescription, String>>() {
+        currentActivityColumn.setCellFactory(new Callback<TableColumn<JobDescriptionModel, String>, TableCell<JobDescriptionModel, String>>() {
             @Override
-            public TableCell<JobDescription, String> call(final TableColumn<JobDescription, String> p) {
+            public TableCell<JobDescriptionModel, String> call(final TableColumn<JobDescriptionModel, String> p) {
                 return createActivityCell();
             }
         });
     }
 
-    private TableCell<JobDescription, String> createActivityCell() {
+    private TableCell<JobDescriptionModel, String> createActivityCell() {
         return new TextFieldTableCell<>(new ActivityFieldHandler());
     }
 

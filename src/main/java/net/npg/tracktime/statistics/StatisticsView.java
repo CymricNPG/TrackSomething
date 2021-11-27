@@ -20,7 +20,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
-import net.npg.tracktime.data.DateUtil;
+import net.npg.tracktime.model.DateUtil;
 
 import java.net.URL;
 import java.util.Collection;
