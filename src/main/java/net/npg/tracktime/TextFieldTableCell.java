@@ -4,9 +4,6 @@
  */
 package net.npg.tracktime;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.TableCell;
@@ -27,37 +24,33 @@ public class TextFieldTableCell<S> extends TableCell<S, String> {
         textField.setEditable(true);
         setAlignment(Pos.CENTER);
         setGraphic(textField);
-        textField.focusedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(final ObservableValue<? extends Boolean> ov, final Boolean t, final Boolean t1) {
-                if (!ov.getValue()) {
-                    textField.setText("");
-                }
+        textField.focusedProperty().addListener((ov, t, t1) -> {
+            if (!ov.getValue()) {
+                textField.setText("");
             }
         });
-        textField.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(final KeyEvent t) {
-                if (t == null) {
-                    return;
+        textField.setOnKeyPressed(t -> handleKey(textHandler, t));
+    }
+
+    private void handleKey(final TextAddEventHandler textHandler, final KeyEvent t) {
+        if (t == null) {
+            return;
+        }
+        switch (t.getCode()) {
+            case ENTER:
+                if (StringUtils.isEmpty(textField.getText())) {
+                    break;
                 }
-                switch (t.getCode()) {
-                    case ENTER:
-                        if (StringUtils.isEmpty(textField.getText())) {
-                            break;
-                        }
-                        final int i = getIndex();
-                        textHandler.addText(i, textField.getText());
-                        textField.setText("");
-                        break;
-                    case ESCAPE:
-                        textField.setText("");
-                        break;
-                    default:
-                        break;
-                }
-            }
-        });
+                final int i = getIndex();
+                textHandler.addText(i, textField.getText());
+                textField.setText("");
+                break;
+            case ESCAPE:
+                textField.setText("");
+                break;
+            default:
+                break;
+        }
     }
 
     @Override

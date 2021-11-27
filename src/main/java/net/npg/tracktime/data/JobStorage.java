@@ -13,7 +13,9 @@ import java.util.ArrayList;
 /**
  * @author Cymric
  */
-public class JobStorage {
+public final class JobStorage {
+    private JobStorage() {
+    }
 
     public static void writeToStorage(final TrackTimeData trackTimeData) throws IOException {
         final ObjectMapper objectMapper = new ObjectMapper();
