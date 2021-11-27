@@ -20,7 +20,6 @@ public class TextFieldTableCell<S> extends TableCell<S, String> {
 
     TextFieldTableCell(final TextAddEventHandler textHandler) {
         textField = new TextField();
-        textField.setStyle("-fx-base: red;");
         textField.setEditable(true);
         setAlignment(Pos.CENTER);
         setGraphic(textField);

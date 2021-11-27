@@ -7,6 +7,7 @@ plugins {
     id("org.springframework.boot") version "2.6.0"
     id("org.openjfx.javafxplugin") version "0.0.10"
     id("org.sonarqube") version "3.3"
+    id("org.beryx.runtime") version "1.12.7"
 }
 
 group = "net.npg"
@@ -48,8 +49,6 @@ configure<JavaFXOptions> {
 }
 
 dependencies {
-    implementation("org.slf4j", "slf4j-api", slf4jVersion)
-    implementation("ch.qos.logback", "logback-classic", "1.2.3")
     implementation("com.fasterxml.jackson.core", "jackson-databind", "2.12.4")
     testImplementation("org.junit.jupiter", "junit-jupiter-api", "5.8.1")
     testImplementation("org.junit.jupiter", "junit-jupiter", "5.8.1")
@@ -61,4 +60,30 @@ dependencies {
     implementation("org.apache.commons", "commons-lang3", "3.12.0")
     implementation("org.apache.logging.log4j", "log4j-api", "2.14.1")
     implementation("org.apache.logging.log4j", "log4j-core", "2.14.1")
+}
+
+val currentOs = org.gradle.internal.os.OperatingSystem.current()
+val imgType = if (currentOs.isWindows) "ico" else if (currentOs.isMacOsX) "icns" else "png"
+
+runtime {
+    options.addAll("--strip-debug", "--compress", "2", "--no-header-files", "--no-man-pages")
+    launcher {
+        noConsole = false
+    }
+    jpackage {
+
+        imageOptions.addAll(listOf("--icon", "src/main/resources/hellofx.$imgType"))
+        installerOptions.addAll(listOf("--resource-dir", "src/main/resources"))
+        installerOptions.addAll(listOf("--vendor", "Acme Corporation"))
+        if (currentOs.isWindows) {
+            installerOptions.addAll(
+                listOf(
+                    "--win-per-user-install",
+                    "--win-dir-chooser",
+                    "--win-menu",
+                    "--win-shortcut"
+                )
+            )
+        }
+    }
 }
