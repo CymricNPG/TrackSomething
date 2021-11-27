@@ -19,8 +19,8 @@ public class ButtonTableCell<S> extends TableCell<S, Boolean> {
     private final Button button;
 
     ButtonTableCell(final ButtonPressedEventHandler buttonPressedHandler) {
-        this.button = new Button();
-        this.button.setAlignment(Pos.CENTER);
+        button = new Button();
+        button.setAlignment(Pos.CENTER);
         setAlignment(Pos.CENTER);
         changeToStartButton();
         button.setOnAction(t -> {

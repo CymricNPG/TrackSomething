@@ -6,12 +6,14 @@ plugins {
     application
     id("org.springframework.boot") version "2.6.0"
     id("org.openjfx.javafxplugin") version "0.0.10"
+    id("org.sonarqube") version "3.3"
 }
 
 group = "net.npg"
 version = "1.0-SNAPSHOT"
 
 apply(plugin = "io.spring.dependency-management")
+
 configure<JavaPluginExtension> {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
@@ -32,6 +34,16 @@ tasks.test {
         events("passed", "skipped", "failed")
     }
 }
+configure<org.sonarqube.gradle.SonarQubeExtension> {
+
+}
+sonarqube {
+    properties {
+        property("sonar.host.url", "http://localhost:9000")
+        property("sonar.login", "eed9ea7ce4c8c46c8c1fdba8ccb8923e7acef0a4")
+    }
+}
+
 
 repositories {
     mavenCentral()
