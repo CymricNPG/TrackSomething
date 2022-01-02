@@ -1,13 +1,12 @@
-import org.openjfx.gradle.JavaFXOptions
-
 plugins {
     java
     idea
     application
-    id("org.springframework.boot") version "2.6.0"
+    id("org.springframework.boot") version "2.6.2"
     id("org.openjfx.javafxplugin") version "0.0.10"
     id("org.sonarqube") version "3.3"
     id("org.beryx.runtime") version "1.12.7"
+    id("com.github.ben-manes.versions") version "0.40.0"
 }
 
 group = "net.npg"
@@ -43,23 +42,23 @@ repositories {
     mavenCentral()
 }
 
-configure<JavaFXOptions> {
+configure<org.openjfx.gradle.JavaFXOptions> {
     modules("javafx.controls", "javafx.fxml", "javafx.graphics")
     version = "17"
 }
 
 dependencies {
-    implementation("com.fasterxml.jackson.core", "jackson-databind", "2.12.4")
-    testImplementation("org.junit.jupiter", "junit-jupiter-api", "5.8.1")
-    testImplementation("org.junit.jupiter", "junit-jupiter", "5.8.1")
-    implementation("org.springframework.boot", "spring-boot-starter", "2.6.0") {
+    implementation("com.fasterxml.jackson.core", "jackson-databind", "2.13.1")
+    testImplementation("org.junit.jupiter", "junit-jupiter-api", "5.8.2")
+    testImplementation("org.junit.jupiter", "junit-jupiter", "5.8.2")
+    implementation("org.springframework.boot", "spring-boot-starter", "2.6.2") {
         exclude(group = "org.springframework.boot", module = "spring-boot-starter-logging")
     }
-    implementation("org.springframework.boot", "spring-boot-starter-log4j2", "2.6.0")
+    implementation("org.springframework.boot", "spring-boot-starter-log4j2", "2.6.2")
     implementation("com.google.guava", "guava", "31.0.1-jre")
     implementation("org.apache.commons", "commons-lang3", "3.12.0")
-    implementation("org.apache.logging.log4j", "log4j-api", "2.14.1")
-    implementation("org.apache.logging.log4j", "log4j-core", "2.14.1")
+    implementation("org.apache.logging.log4j", "log4j-api", "2.17.1")
+    implementation("org.apache.logging.log4j", "log4j-core", "2.17.1")
 }
 
 val currentOs = org.gradle.internal.os.OperatingSystem.current()
@@ -78,10 +77,7 @@ runtime {
         if (currentOs.isWindows) {
             installerOptions.addAll(
                 listOf(
-                    "--win-per-user-install",
-                    "--win-dir-chooser",
-                    "--win-menu",
-                    "--win-shortcut"
+                    "--win-per-user-install", "--win-dir-chooser", "--win-menu", "--win-shortcut"
                 )
             )
         }
